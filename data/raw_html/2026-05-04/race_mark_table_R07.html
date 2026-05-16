@@ -1,0 +1,1066 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <META http-equiv=content-type content="text/html; charset=UTF-8" />
+  <META http-equiv="content-script-type" content="text/javascript" />
+  <META http-equiv="content-style-type" content="text/css" />
+  <LINK href="/KeibaWeb/resources/css/style1.css?bld=20251121111641" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="/KeibaWeb/resources/js/jquery-1.9.1.min.js?bld=20251121111641"></script>
+  <SCRIPT language=JavaScript src="/KeibaWeb/resources/js/common.js?bld=20251121111641"></SCRIPT>
+  <meta name="description" content="" />
+  <meta name="keywords" content="" />
+  <title>レース成績表</title>
+  <link rel="shortcut icon" href="/images/nar.ico">
+</head> <body>
+
+
+<header>
+    <div class="headerInner">
+        <div class="titleArea">
+            <h1>
+                <span>地方競馬情報サイト</span>
+                <a href="/index.html">
+                    <img src="/KeibaWeb/resources/img/mainlogo.png?bld=20251121111641" alt="">
+                </a>
+            </h1>
+            <div class="vote">
+                <img id="headerbanner00" src="/KeibaWeb/resources/img/header_banner_00.png?bld=20251121111641" alt="">
+            </div>
+            <ul class="bannerArea clearfix">
+                <li>
+                    <a href="https://www.keiba.go.jp/jranet/" target="_blank">
+                        <img class="normal" src="/KeibaWeb/resources/img/header_banner_01.png?bld=20251121111641">
+                        <img class="min" src="/KeibaWeb/resources/img/header_banner_01_min.png?bld=20251121111641">
+                    </a>
+                </li>
+                <li>
+                    <a href="https://www.spat4.jp/keiba/pc" target="_blank">
+                        <img class="normal" src="/KeibaWeb/resources/img/header_banner_02.png?bld=20251121111641">
+                        <img class="min" src="/KeibaWeb/resources/img/header_banner_02_min.png?bld=20251121111641">
+                    </a>
+                </li>
+
+                <li>
+                    <a href="https://my.keiba.rakuten.co.jp/?scid=keiba_NAR_bet" target="_blank">
+                        <img class="normal" src="/KeibaWeb/resources/img/header_banner_03.png?bld=20251121111641">
+                        <img class="min" src="/KeibaWeb/resources/img/header_banner_03_min.png?bld=20251121111641">
+                    </a>
+                </li>
+
+                <li>
+                    <a href="https://www.oddspark.com/keiba/auth/VoteKeibaTop.do" target="_blank">
+                        <img class="normal" src="/KeibaWeb/resources/img/header_banner_04.png?bld=20251121111641">
+                        <img class="min" src="/KeibaWeb/resources/img/header_banner_04_min.png?bld=20251121111641">
+                    </a>
+                </li>
+            </ul>
+
+
+
+            <div class="topSearch clearfix">
+                <form id="cse-search-box" action="https://google.com/cse">
+                    <input type="hidden" name="cx" value="000374752549361390111:sr3uzpcoe-q" />
+                    <input type="hidden" name="ie" value="UTF-8" />
+                    <input type="text" name="q" size="31" class="searchBox"/ placeholder="サイト内検索">
+                    <input type="submit" name="sa" value="" class="searchBtn"/>
+                </form>
+                <script type="text/javascript"
+                                src="https://www.google.com/coop/cse/brand?form=cse-search-boxamp;lang=ja"></script>
+            </div>
+        </div>
+    </div>
+
+    <div class="globalNavi">
+        <ul class="gNavi clearfix">
+            <li class="gNaviitem1">
+                <a href="/KeibaWeb/TodayRaceInfo/TodayRaceInfoTop">
+                    <img src="/KeibaWeb/resources/img/icon_gnavi_08.png?bld=20251121111641" alt="">
+                    <p>レース情報</p>
+                </a>
+            </li>
+            <li class="gNaviitem2">
+                <a href="/KeibaWeb/MonthlyConveneInfo/MonthlyConveneInfoTop">
+                    <img src="/KeibaWeb/resources/img/icon_gnavi_01.png?bld=20251121111641" alt="">
+                    <p>開催日程</p>
+                </a>
+            </li>
+            <li class="gNaviitem3">
+                <a href="/live/" target="_blank">
+                    <img src="/KeibaWeb/resources/img/icon_gnavi_02.png?bld=20251121111641" alt="">
+                    <p>ライブ中継</p>
+                </a>
+            </li>
+            <li class="gNaviitem4">
+                <a href="/dirtgraderace/">
+                    <img class="dart" src="/KeibaWeb/resources/img/icon_gnavi_12.png?bld=20251121111641" alt="">
+                    <p>ダートグレード競走</p>
+                </a>
+            </li>
+            <li class="gNaviitem5">
+                <a href="/gradedrace/">
+                    <img src="/KeibaWeb/resources/img/icon_gnavi_04.png?bld=20251121111641" alt="">
+                    <p>シリーズ･重賞競走</p>
+                </a>
+            </li>
+            <li class="gNaviitem6">
+                <a href="/KeibaWeb/DataRoom/DataRoomTop">
+                    <img src="/KeibaWeb/resources/img/icon_gnavi_05.png?bld=20251121111641" alt="">
+                    <p>データ検索</p>
+                </a>
+            </li>
+            <li class="gNaviitem7">
+                <a href="/guide/index.html">
+                    <img src="/KeibaWeb/resources/img/icon_gnavi_06.png?bld=20251121111641" alt="">
+                    <p>競馬場ガイド</p>
+                </a>
+            </li>
+            <!--<li>
+                <a href="about/">
+                    <img src="/KeibaWeb/resources/img/icon_gnavi_07.png?bld=20251121111641" alt="">
+                    <p>もっと！地方競馬</p>
+                </a>
+            </li>-->
+        </ul>
+    </div>
+</header>
+
+<div class="breadCrumb"></div>
+<div id = "mainContainer">
+<div id="container00">
+
+<table class="container" border="0"><tr><td valign="top">
+</td></tr><tr><td class="containerMain" valign="top">
+
+
+<table class="cover" border="0"><tr><td>
+<div style="float:left">
+
+
+
+<table class="bs" border="0" cellpadding="0" cellspacing="0">
+<tr><td><img class="nml" src="/KeibaWeb/resources/images/bottan2_01.gif?bld=20251121111641" width="8" height="7"></td><td background="/KeibaWeb/resources/images/bottan2_02.gif?bld=20251121111641"><img class="nml" src="/KeibaWeb/resources/images/spacer.gif?bld=20251121111641" height="7"></td><td><img class="nml" src="/KeibaWeb/resources/images/bottan2_03.gif?bld=20251121111641" width="8" height="7"></td></tr>
+<tr><td background="/KeibaWeb/resources/images/bottan2_04.gif?bld=20251121111641"><img class="nml" src="/KeibaWeb/resources/images/spacer.gif?bld=20251121111641" width="8"></td><td bgcolor="#eeeeee">
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><td>
+<a href='
+/KeibaWeb/TodayRaceInfo/RaceList?k_raceDate=2026%2f05%2f04&k_babaCode=3
+'>
+<span class="medium">当日メニュー</span>
+</a>
+</td><td>|</td>
+
+<td>
+<a href='
+/KeibaWeb/TodayRaceInfo/OddsTanFuku?k_raceDate=2026%2f05%2f04&k_raceNo=7&k_babaCode=3
+'>
+<span class="medium">オッズ</span>
+</a>
+</td><td>|</td>
+
+
+<td>
+<a href='
+/KeibaWeb/TodayRaceInfo/DebaTable?k_raceDate=2026%2f05%2f04&k_raceNo=7&k_babaCode=3
+'>
+<span class="medium">出馬表</span>
+</a>
+</td><td>|</td>
+
+
+<td>
+<a href='
+/KeibaWeb/TodayRaceInfo/CompeteTable?k_raceDate=2026%2f05%2f04&k_raceNo=7&k_babaCode=3
+'>
+<span class="medium">対戦表</span>
+</a>
+</td><td>|</td>
+
+
+<td>
+<a href='
+?k_raceDate=2026%2f05%2f04&k_raceNo=6&k_babaCode=3
+'>
+<span class="medium2">＜＜前Ｒ</span>
+</a>
+</td><td>|</td>
+
+<form action="/KeibaWeb/TodayRaceInfo/RaceMarkTable" method="get" >
+<td>
+<select name="k_raceNo" onChange="submit();">
+
+
+<option value="1">1R</option>
+
+
+<option value="2">2R</option>
+
+
+<option value="3">3R</option>
+
+
+<option value="4">4R</option>
+
+
+<option value="5">5R</option>
+
+
+<option value="6">6R</option>
+
+<option value="7" selected="true" >7R</option>
+
+
+
+<option value="8">8R</option>
+
+
+<option value="9">9R</option>
+
+
+<option value="10">10R</option>
+
+
+<option value="11">11R</option>
+
+
+<option value="12">12R</option>
+
+</select>
+<input type="hidden" name="k_raceDate" value="2026/05/04">
+<input type="hidden" name="k_babaCode" value="3">
+</td>
+</form>
+<td>|</td>
+<td><a href='
+?k_raceDate=2026%2f05%2f04&k_raceNo=8&k_babaCode=3
+'>
+<span class="medium2">次Ｒ＞＞</span>
+</a></td>
+
+</tr></table>
+</td><td background="/KeibaWeb/resources/images/bottan2_06.gif?bld=20251121111641"><img class="nml" src="/KeibaWeb/resources/images/spacer.gif?bld=20251121111641" width="8"></td></tr>
+<tr><td><img class="nml" src="/KeibaWeb/resources/images/bottan2_07.gif?bld=20251121111641" width="8" height="7"></td><td background="/KeibaWeb/resources/images/bottan2_08.gif?bld=20251121111641"><img class="nml" src="/KeibaWeb/resources/images/spacer.gif?bld=20251121111641" height="7"></td><td><img class="nml" src="/KeibaWeb/resources/images/bottan2_09.gif?bld=20251121111641" width="8" height="7"></td></tr>
+</table>
+</div>
+
+<div style="margin-left:40px;width:auto;text-align:center;float:left;border:solid 1px #000;padding:8px;border-radius:8px;background-color:#eeeeee">
+
+
+
+
+<a href='#' onclick='window.open("http://keiba-lv-st.jp/movie/player?date=20260504&amp;race=7&amp;track=obihiro","","width=800, height=600, location=no,menubar=no,toolbar=no,status=no,scrollbars=yes,resizable=yes"); return false;' style='cursor: pointer;'>
+レース映像</a>
+
+
+
+
+</div>
+
+<div style="clear:both"></div>
+<BR>
+
+
+
+
+
+
+
+<table class="bs" border="0" cellspacing="0" cellpadding="4"><tr><td nowrap>
+2026年5月4日 （月）
+<span class="plus1bold01">帯　広第７競走</span>
+
+200ｍ
+（直）
+
+天候：曇　馬場：2.7
+</td></tr></table>
+<BR><BR>
+<span class="midium"><NOBR><span class="plus1bold02">マリちゃん誕生日記念Ｂ４－１１</span></NOBR>
+<BR>（混合　3歳以上 規定）</span>
+<P><table class="bs" border="0" cellspacing="0" cellpadding="4"><tr>
+<td>    賞金　1着    330,000円    </td>
+<td>    2着    122,000円    </td>
+<td>    3着    69,000円    </td>
+<td>    4着    36,000円    </td>
+<td>    5着    19,000円    </td>
+</tr></table>
+<table class="bs" border="0" cellspacing="0" cellpadding="0"><tr><td class="dbtbl">
+<table class="bs" border=1 cellspacing="0" cellpadding="1" width="640">
+<tr><td colspan="15" class="dbtitle"><span class="plus1bold01">７R        成績表</span></td></tr>
+<tr class="dbitem"><td nowrap>        着<br>        順        </td><td nowrap>        枠<br>        番        </td><td nowrap>        馬<br>        番        </td>        <td nowrap>馬名</td>        <td nowrap>所属</td>        <td nowrap>性齢</td>        <td nowrap>
+
+        積載<br>
+        重量
+
+</td><td nowrap>        騎手<br>        (所属)        </td><td nowrap>調教師</td><td nowrap>馬体重</td><td nowrap>差</td><td nowrap>タイム</td><td nowrap>着差</td><td nowrap>        上り<br>        3F        </td><td nowrap>        人<br>        気        </td></tr>
+
+<tr bgcolor="#FFFFFF" align="center">
+<td nowrap><span class="bold">1</span></td>
+<td nowrap>6</td>
+<td nowrap>6</td>
+<td nowrap class="dbdata3"><span class="bold">
+<a href='
+/KeibaWeb/DataRoom/HorseMarkInfo?k_lineageLoginCode=23172407374
+' target="_blank">
+ハクホウエイ
+</a>
+</span></td>
+<td nowrap>ばんえい</td>
+<td nowrap><span class=''>牡 8 </span></td>
+<td nowrap class="dbdata2">   600</td>
+<td nowrap>
+<a href='/KeibaWeb/DataRoom/RiderMark?k_riderLicenseNo=38077' target="_blank">
+赤塚健(ばんえい)
+</a>
+<br></td>
+<td nowrap>
+<a href='/KeibaWeb/DataRoom/TrainerMark?k_trainerLicenseNo=18062' target="_blank">
+大友人
+</a>
+</td>
+<td nowrap class="dbdata2">1056</td>
+<td nowrap>18</td>
+<td nowrap class="dbdata2">
+1:52.9
+</td>
+<td nowrap>&nbsp;</td>
+<td nowrap class="dbdata2">&nbsp;</td>
+<td nowrap>6</td>
+</tr>
+
+<tr bgcolor="#FFFFFF" align="center">
+<td nowrap><span class="bold">2</span></td>
+<td nowrap>4</td>
+<td nowrap>4</td>
+<td nowrap class="dbdata3"><span class="bold">
+<a href='
+/KeibaWeb/DataRoom/HorseMarkInfo?k_lineageLoginCode=23152404174
+' target="_blank">
+アアモンドブラック
+</a>
+</span></td>
+<td nowrap>ばんえい</td>
+<td nowrap><span class=''>牡 8 </span></td>
+<td nowrap class="dbdata2">   600</td>
+<td nowrap>
+<a href='/KeibaWeb/DataRoom/RiderMark?k_riderLicenseNo=38071' target="_blank">
+船山蔵(ばんえい)
+</a>
+<br></td>
+<td nowrap>
+<a href='/KeibaWeb/DataRoom/TrainerMark?k_trainerLicenseNo=18018' target="_blank">
+田上忠
+</a>
+</td>
+<td nowrap class="dbdata2">1043</td>
+<td nowrap>-4</td>
+<td nowrap class="dbdata2">
+1:53.6
+</td>
+<td nowrap>&nbsp;</td>
+<td nowrap class="dbdata2">&nbsp;</td>
+<td nowrap>1</td>
+</tr>
+
+<tr bgcolor="#FFFFFF" align="center">
+<td nowrap><span class="bold">3</span></td>
+<td nowrap>3</td>
+<td nowrap>3</td>
+<td nowrap class="dbdata3"><span class="bold">
+<a href='
+/KeibaWeb/DataRoom/HorseMarkInfo?k_lineageLoginCode=20102506176
+' target="_blank">
+ゴールドキング
+</a>
+</span></td>
+<td nowrap>ばんえい</td>
+<td nowrap><span class=''>牡 6 </span></td>
+<td nowrap class="dbdata2">   600</td>
+<td nowrap>
+<a href='/KeibaWeb/DataRoom/RiderMark?k_riderLicenseNo=38074' target="_blank">
+長澤幸(ばんえい)
+</a>
+<br></td>
+<td nowrap>
+<a href='/KeibaWeb/DataRoom/TrainerMark?k_trainerLicenseNo=18029' target="_blank">
+服部義
+</a>
+</td>
+<td nowrap class="dbdata2">1123</td>
+<td nowrap>14</td>
+<td nowrap class="dbdata2">
+1:58.7
+</td>
+<td nowrap>&nbsp;</td>
+<td nowrap class="dbdata2">&nbsp;</td>
+<td nowrap>2</td>
+</tr>
+
+<tr bgcolor="#FFFFFF" align="center">
+<td nowrap><span class="bold">4</span></td>
+<td nowrap>8</td>
+<td nowrap>9</td>
+<td nowrap class="dbdata3"><span class="bold">
+<a href='
+/KeibaWeb/DataRoom/HorseMarkInfo?k_lineageLoginCode=20182501477
+' target="_blank">
+オシャレワアシモト
+</a>
+</span></td>
+<td nowrap>ばんえい</td>
+<td nowrap><span class='red'>牝 5 </span></td>
+<td nowrap class="dbdata2">   570</td>
+<td nowrap>
+<a href='/KeibaWeb/DataRoom/RiderMark?k_riderLicenseNo=38087' target="_blank">
+☆大友一(ばんえい)
+</a>
+<br></td>
+<td nowrap>
+<a href='/KeibaWeb/DataRoom/TrainerMark?k_trainerLicenseNo=18029' target="_blank">
+服部義
+</a>
+</td>
+<td nowrap class="dbdata2">992</td>
+<td nowrap>-2</td>
+<td nowrap class="dbdata2">
+2:00.7
+</td>
+<td nowrap>&nbsp;</td>
+<td nowrap class="dbdata2">&nbsp;</td>
+<td nowrap>7</td>
+</tr>
+
+<tr bgcolor="#FFFFFF" align="center">
+<td nowrap><span class="bold">5</span></td>
+<td nowrap>5</td>
+<td nowrap>5</td>
+<td nowrap class="dbdata3"><span class="bold">
+<a href='
+/KeibaWeb/DataRoom/HorseMarkInfo?k_lineageLoginCode=20131503977
+' target="_blank">
+テンボシヴィーナス
+</a>
+</span></td>
+<td nowrap>ばんえい</td>
+<td nowrap><span class='red'>牝 5 </span></td>
+<td nowrap class="dbdata2">   580</td>
+<td nowrap>
+<a href='/KeibaWeb/DataRoom/RiderMark?k_riderLicenseNo=38073' target="_blank">
+菊池一(ばんえい)
+</a>
+<br></td>
+<td nowrap>
+<a href='/KeibaWeb/DataRoom/TrainerMark?k_trainerLicenseNo=18072' target="_blank">
+岩本利
+</a>
+</td>
+<td nowrap class="dbdata2">1018</td>
+<td nowrap>7</td>
+<td nowrap class="dbdata2">
+2:13.5
+</td>
+<td nowrap>&nbsp;</td>
+<td nowrap class="dbdata2">&nbsp;</td>
+<td nowrap>3</td>
+</tr>
+
+<tr bgcolor="#FFFFFF" align="center">
+<td nowrap><span class="bold">6</span></td>
+<td nowrap>8</td>
+<td nowrap>8</td>
+<td nowrap class="dbdata3"><span class="bold">
+<a href='
+/KeibaWeb/DataRoom/HorseMarkInfo?k_lineageLoginCode=23182405774
+' target="_blank">
+ホウショウ
+</a>
+</span></td>
+<td nowrap>ばんえい</td>
+<td nowrap><span class=''>牡 8 </span></td>
+<td nowrap class="dbdata2">   600</td>
+<td nowrap>
+<a href='/KeibaWeb/DataRoom/RiderMark?k_riderLicenseNo=38079' target="_blank">
+島津新(ばんえい)
+</a>
+<br></td>
+<td nowrap>
+<a href='/KeibaWeb/DataRoom/TrainerMark?k_trainerLicenseNo=18029' target="_blank">
+服部義
+</a>
+</td>
+<td nowrap class="dbdata2">977</td>
+<td nowrap>-3</td>
+<td nowrap class="dbdata2">
+2:14.8
+</td>
+<td nowrap>&nbsp;</td>
+<td nowrap class="dbdata2">&nbsp;</td>
+<td nowrap>4</td>
+</tr>
+
+<tr bgcolor="#FFFFFF" align="center">
+<td nowrap><span class="bold">7</span></td>
+<td nowrap>7</td>
+<td nowrap>7</td>
+<td nowrap class="dbdata3"><span class="bold">
+<a href='
+/KeibaWeb/DataRoom/HorseMarkInfo?k_lineageLoginCode=20162504077
+' target="_blank">
+ライデンサマー
+</a>
+</span></td>
+<td nowrap>ばんえい</td>
+<td nowrap><span class=''>牡 5 </span></td>
+<td nowrap class="dbdata2">   600</td>
+<td nowrap>
+<a href='/KeibaWeb/DataRoom/RiderMark?k_riderLicenseNo=38047' target="_blank">
+村上章(ばんえい)
+</a>
+<br></td>
+<td nowrap>
+<a href='/KeibaWeb/DataRoom/TrainerMark?k_trainerLicenseNo=18017' target="_blank">
+鈴木邦
+</a>
+</td>
+<td nowrap class="dbdata2">1096</td>
+<td nowrap>&nbsp;</td>
+<td nowrap class="dbdata2">
+2:16.1
+</td>
+<td nowrap>&nbsp;</td>
+<td nowrap class="dbdata2">&nbsp;</td>
+<td nowrap>8</td>
+</tr>
+
+<tr bgcolor="#FFFFFF" align="center">
+<td nowrap><span class="bold">8</span></td>
+<td nowrap>1</td>
+<td nowrap>1</td>
+<td nowrap class="dbdata3"><span class="bold">
+<a href='
+/KeibaWeb/DataRoom/HorseMarkInfo?k_lineageLoginCode=20192505675
+' target="_blank">
+サカノキヨマル
+</a>
+</span></td>
+<td nowrap>ばんえい</td>
+<td nowrap><span class=''>牡 7 </span></td>
+<td nowrap class="dbdata2">   600</td>
+<td nowrap>
+<a href='/KeibaWeb/DataRoom/RiderMark?k_riderLicenseNo=38056' target="_blank">
+松本秀(ばんえい)
+</a>
+<br></td>
+<td nowrap>
+<a href='/KeibaWeb/DataRoom/TrainerMark?k_trainerLicenseNo=18018' target="_blank">
+田上忠
+</a>
+</td>
+<td nowrap class="dbdata2">1013</td>
+<td nowrap>-13</td>
+<td nowrap class="dbdata2">
+2:18.4
+</td>
+<td nowrap>&nbsp;</td>
+<td nowrap class="dbdata2">&nbsp;</td>
+<td nowrap>9</td>
+</tr>
+
+<tr bgcolor="#FFFFFF" align="center">
+<td nowrap><span class="bold">9</span></td>
+<td nowrap>2</td>
+<td nowrap>2</td>
+<td nowrap class="dbdata3"><span class="bold">
+<a href='
+/KeibaWeb/DataRoom/HorseMarkInfo?k_lineageLoginCode=20132508677
+' target="_blank">
+チャンピオンプレス
+</a>
+</span></td>
+<td nowrap>ばんえい</td>
+<td nowrap><span class=''>牡 5 </span></td>
+<td nowrap class="dbdata2">   600</td>
+<td nowrap>
+<a href='/KeibaWeb/DataRoom/RiderMark?k_riderLicenseNo=38070' target="_blank">
+西謙一(ばんえい)
+</a>
+<br></td>
+<td nowrap>
+<a href='/KeibaWeb/DataRoom/TrainerMark?k_trainerLicenseNo=18026' target="_blank">
+西邑春
+</a>
+</td>
+<td nowrap class="dbdata2">935</td>
+<td nowrap>&nbsp;</td>
+<td nowrap class="dbdata2">
+2:31.8
+</td>
+<td nowrap>&nbsp;</td>
+<td nowrap class="dbdata2">&nbsp;</td>
+<td nowrap>5</td>
+</tr>
+
+</table></td></tr></table>
+
+<table class="bs" border="0" cellspacing="0" cellpadding="2" width="400"><tr>
+
+</tr></table>
+
+<br>
+
+
+
+
+
+
+
+
+
+
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="dbtbl">
+      <table border="1" cellspacing="0" cellpadding="1" width="100%">
+        <tr class="dbtitle"><td colspan="28" class="dbtitle"><span class="plus1bold01">払戻金</span></td></tr>
+        <tr class="dbitem">
+          <td rowspan="2"><b>Ｒ</b></td>
+          <td colspan="3"><b>単勝</b></td>
+          <td colspan="3"><b>複勝</b></td>
+          <td colspan="3"><b>枠連複</b></td>
+          <td colspan="3"><b>馬連複</b></td>
+          
+          <td colspan="3"><b>馬連単</b></td>
+          <td colspan="3"><b>ワイド</b></td>
+          <td colspan="3"><b>三連複</b></td>
+          <td colspan="3"><b>三連単</b></td>
+        </tr>
+        <tr class="dbitem">
+          
+          
+            <td nowrap="" class="dbdata4">組番</td>
+            <td nowrap="" class="dbdata4">払戻金</td>
+            <td nowrap="" class="dbdata4">人気</td>
+          
+          
+          
+            <td nowrap="" class="dbdata4">組番</td>
+            <td nowrap="" class="dbdata4">払戻金</td>
+            <td nowrap="" class="dbdata4">人気</td>
+          
+          
+          
+            <td nowrap="" class="dbdata4">組番</td>
+            <td nowrap="" class="dbdata4">払戻金</td>
+            <td nowrap="" class="dbdata4">人気</td>
+          
+          
+          
+            <td nowrap="" class="dbdata4">組番</td>
+            <td nowrap="" class="dbdata4">払戻金</td>
+            <td nowrap="" class="dbdata4">人気</td>
+          
+          
+          
+          
+          
+            <td nowrap="" class="dbdata4">組番</td>
+            <td nowrap="" class="dbdata4">払戻金</td>
+            <td nowrap="" class="dbdata4">人気</td>
+          
+          
+          
+            <td nowrap="" class="dbdata4">組番</td>
+            <td nowrap="" class="dbdata4">払戻金</td>
+            <td nowrap="" class="dbdata4">人気</td>
+          
+          
+          
+            <td nowrap="" class="dbdata4">組番</td>
+            <td nowrap="" class="dbdata4">払戻金</td>
+            <td nowrap="" class="dbdata4">人気</td>
+          
+          
+          
+            <td nowrap="" class="dbdata4">組番</td>
+            <td nowrap="" class="dbdata4">払戻金</td>
+            <td nowrap="" class="dbdata4">人気</td>
+          
+        </tr>
+        
+          
+            <tr class="dbdata">
+
+<td class="dbitem"><span class="plus1bold01">7</span></td>
+
+
+
+<td class="dbdata7">
+6
+</td>
+<td class="dbdata2">
+2,210円
+</td>
+<td class="dbdata2">
+6
+</td>
+
+
+
+
+<td class="dbdata7">
+6<BR>4<BR>3
+</td>
+<td class="dbdata2">
+200円<BR>100円<BR>100円
+</td>
+<td class="dbdata2">
+4<BR>1<BR>2
+</td>
+
+
+
+
+<td class="dbdata7">
+4-6
+</td>
+<td class="dbdata2">
+2,650円
+</td>
+<td class="dbdata2">
+7
+</td>
+
+
+
+
+<td class="dbdata7">
+4-6
+</td>
+<td class="dbdata2">
+1,380円
+</td>
+<td class="dbdata2">
+3
+</td>
+
+
+
+
+
+
+<td class="dbdata7">
+6-4
+</td>
+<td class="dbdata2">
+3,820円
+</td>
+<td class="dbdata2">
+11
+</td>
+
+
+
+
+<td class="dbdata7">
+4-6<BR>3-6<BR>3-4
+</td>
+<td class="dbdata2">
+370円<BR>410円<BR>140円
+</td>
+<td class="dbdata2">
+4<BR>6<BR>1
+</td>
+
+
+
+
+<td class="dbdata7">
+3-4-6
+</td>
+<td class="dbdata2">
+500円
+</td>
+<td class="dbdata2">
+1
+</td>
+
+
+
+
+<td class="dbdata7">
+6-4-3
+</td>
+<td class="dbdata2">
+13,990円
+</td>
+<td class="dbdata2">
+41
+</td>
+
+            </tr>
+          
+        
+      </table>
+    </td>
+  </tr>
+</table>
+<br>
+
+
+
+
+
+
+
+
+
+<table class="bs" border="0" cellspacing="0" cellpadding="0"><tr><td class="dbtbl"> 
+<table class="bs" border=1 cellspacing="0" cellpadding="1" width="100%">
+<tr><td colspan="8" nowrap class="dbtitle"><span class="plus1bold01">馬　情　報</span></td></tr>
+<tr><td nowrap class="dbitem" rowspan="4">馬名</td>
+<td nowrap rowspan="4" class="dbdata"><span class="plus1bold01">ハクホウエイ</span>
+<font color="red"></font><br>
+<br>（日輓）
+
+
+<span class=''>牡　</span>栗毛</td>
+<td nowrap class="dbitem"  rowspan="2">父</td>
+<td nowrap class="dbdata3"rowspan="2"><span class="minus1">（日輓）</span>ミスタートカチ</td>
+<td nowrap class="dbitem">父</td>
+<td nowrap colspan="3" class="dbdata3"><span class="minus1">（半血）</span>タケタカラ</td>
+</tr>
+<tr>
+<td nowrap class="dbitem">母</td><td nowrap colspan="3" class="dbdata3"><span class="minus1">（半血）</span>花子姫</td>
+</tr>
+<tr>
+<td nowrap class="dbitem" rowspan="2">母</td><td nowrap class="dbdata3" rowspan="2"><span class="minus1">（日輓）</span>雷姫椿</td>
+<td nowrap class="dbitem">父</td><td nowrap colspan="3" class="dbdata3"><span class="minus1">（半血）</span>ライデンボーイ</td>
+</tr>
+<tr>
+<td nowrap class="dbitem">母</td><td nowrap colspan="3" class="dbdata3"><span class="minus1">（半血）</span>姫　椿</td>
+</tr>
+<tr>
+<td nowrap class="dbitem2">調教師</td>
+<td nowrap class="dbdata">大　友　　栄　人（ばんえい）</td>
+<td nowrap class="dbitem2">生年月日</td>
+<td nowrap class="dbdata">2018年5月11日</td>
+<td nowrap class="dbitem2">生産牧場</td>
+<td nowrap class="dbdata">横　山　キク子</td>
+</tr>
+<tr> 
+<td nowrap class="dbitem2">馬主</td>
+<td nowrap colspan="3" class="dbdata">齊　藤　　博　美</td>
+<td nowrap class="dbitem2">産地</td>
+<td class="dbdata" nowrap>北海道中川郡本別町</td>
+</tr>
+<tr> 
+<td nowrap class="dbitem2">地方収得賞金</td>
+<td nowrap class="dbdata">5,500,000</td>
+<td nowrap class="dbitem2">中央収得賞金</td>
+<td nowrap class="dbdata">0</td>
+<td nowrap class="dbitem2">付加賞金</td>
+<td nowrap class="dbdata">0</td>
+</tr>
+</table></td></tr></table>
+
+<br><br>
+
+
+
+
+
+
+<table class="bs" border="0" cellspacing="0" cellpadding="0">
+<tr><td class="dbtbl"><table class="bs" border="1" cellspacing="0" cellpadding="1" width="100%">
+<tr><td colspan="10" class="dbtitle"><span class="plus1bold01">生　涯　成　績</span></td></tr>
+<tr class="dbitem"><td nowrap>着別回数</td>
+<td nowrap>１着</td><td nowrap>２着</td><td nowrap>３着</td>
+<td nowrap>４着</td><td nowrap>５着</td><td nowrap>着外</td>
+<td nowrap>合計</td><td nowrap>連対率</td></tr>
+<tr class="dbdata"><td align="center" nowrap>生　涯<br>(地　方)<br>        (中　央)</td>
+<td nowrap>14<br>
+(14)<br>
+(0)</td>
+<td nowrap>9<br>
+(9)<br>
+(0)</td>
+<td nowrap>15<br>
+(15)<br>
+(0)</td>
+<td nowrap>6<br>
+(6)<br>
+(0)</td>
+<td nowrap>16<br>
+(16)<br>
+(0)</td>
+<td nowrap>94<br>
+(94)<br>
+(0)</td>
+<td nowrap>154<br>
+(154)<br>
+(0)</td>
+<td nowrap> 14.9<br>
+(14.9)<br>
+(0.0)</td>
+</tr>
+<tr class="dbdata"><td align="center" nowrap>2026年<br>(地　方)<br>
+(中　央)</td>
+<td nowrap>2<br>
+(2)<br>
+(0)</td>
+<td nowrap>0<br>
+(0)<br>
+(0)</td>
+<td nowrap>0<br>
+(0)<br>
+(0)</td>
+<td nowrap>0<br>
+(0)<br>
+(0)</td>
+<td nowrap>0<br>
+(0)<br>
+(0)</td>
+<td nowrap>8<br>
+(8)<br>
+(0)</td>
+<td nowrap>10<br>
+(10)<br>
+(0)</td>
+<td nowrap>20.0<br>
+(20.0)<br>
+(0.0)</td>
+</tr>
+<tr class="dbdata"><td align="center" nowrap>2025年<br>(地　方)<br>(中　央)</td>
+<td nowrap>2<br>
+(2)<br>
+(0)</td>
+<td nowrap>0<br>
+(0)<br>
+(0)</td>
+<td nowrap>3<br>
+(3)<br>
+(0)</td>
+<td nowrap>2<br>
+(2)<br>
+(0)</td>
+<td nowrap>3<br>
+(3)<br>
+(0)</td>
+<td nowrap>15<br>
+(15)<br>
+(0)</td>
+<td nowrap>25<br>
+(25)<br>
+(0)</td>
+<td nowrap>8.0<br>
+(8.0)<br>
+(0.0)</td>
+</tr></table></td></tr></table>
+
+
+(　) は内数を示します。
+<br><br>
+
+
+
+
+
+
+
+
+<article class="attention">
+  
+    <div class="innerWrapper">
+      
+        <p>※本日のレース情報画面において競馬場名が空欄の日は、<br>　その日に開催がないことを意味しています。<br></p>
+      
+        <p>※重賞競走については、出馬表が確定した段階で表示されます。<br></p>
+      
+        <p>※減量騎手の負担重量は、★は４kg、▲は３kg、△及び◇は２kg、☆は１kg<br>　（ばんえいは、△は２０kg、☆は１０kg）を減じたものを表示しています。<br></p>
+      
+        <p>※競走種類は、特は特別、準は準重賞、重は重賞、表示なしは普通競走<br>　を表しています。<br></p>
+      
+        <p>※レース一覧画面においてレース名欄のＪ認はJRA認定競走、<br>　Ｊ交はJRA条件交流競走、Ｊ指はJRA指定競走を表しています。<br></p>
+      
+        <p>※2014年4月以降、「ナ」と表示されるのは、南関東のナイター開催日における<br>　照明点灯時のレースに限られます。<br>　馬場別成績においてナイターとして集計されるのも同様の扱いとなります。<br></p>
+      
+        <p>※海外競馬における成績については、一部に表示されないことがあります。<br></p>
+      
+        <p>※勝馬投票に的中者がいない場合、その式別投票者全員に100円につき<br>　70円または80円の特払いがあります。表中の70円または80円は特払いを表示しています。<br></p>
+      
+        <p>「勝馬投票券は、必ず正規の窓口または電話投票で購入してください。<br>　ノミ行為・代行業は、法律で禁止されています。<br>　20歳未満の者は、勝馬投票券を購入することはできません。<br>　出馬表・成績・オッズ等は、主催者発表のものと照合してください。」</p>
+      
+    </div>
+  
+</article>
+
+</td></tr></table>
+
+
+</td></tr>
+
+<tr><td valign="bottom">
+<div id="wrapper2"></div>
+</td></tr>
+</table>
+</div>
+</div>
+
+<footer class="footer">
+  <ul class="footerMenu">
+    <li>
+      <a href="/index.html">
+        HOME
+      </a>
+    </li>
+    <li>
+      <a href="/association/">
+        地方競馬全国協会（NAR）
+      </a>
+    </li>
+    <li>
+      <a href="/sitemap.html">
+        サイトマップ
+      </a>
+    </li>
+    <li>
+      <a href="/link.html">
+        関連リンク
+      </a>
+    </li>
+    <li>
+      <a href="/terms.html">
+        利用規約
+      </a>
+    </li>
+    <li>
+      <a href="/qa.html">
+				ご意見・ご要望／FAQ
+	</a>
+    </li>
+  </ul>
+
+  <div class="copyright">
+    copyright 1998-NAR (The National Association of Racing) All Rights Reserved
+  </div>
+				<!-- 言語選択 -->
+				<div class="language cp_sl01">
+					<select onChange="location.href=value;">
+						<option value="#">Language</option>
+						<option value="https://www.goracing.jp/english/">English</option>
+						<option value="https://www.goracing.jp/french/">Francais</option>
+						<option value="https://www.goracing.jp/chinese/">中文</option>
+						<option value="https://www.goracing.jp/korea/">한글</option>
+					</select>
+				</div>
+  
+</footer>
+
+</BODY> </html>
