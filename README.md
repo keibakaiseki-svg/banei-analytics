@@ -5,7 +5,7 @@
 
 ## ステータス
 
-**Phase 1: 全項目スクレイパ + Parquet永続化パイプライン — 完了**
+**Phase 2: 過去レース バックフィル基盤 — 完了 (実行待ち)**
 
 ## ゴール（最終形）
 
@@ -171,15 +171,41 @@ data/parquet/<table>/year=YYYY/month=MM/data.parquet
 
 ## 実行
 
+### 単日パイプライン (Phase 1)
 ```bash
-# 1日分の全レースを取得→パース→Parquetへ永続化→DuckDB検証
 uv run python run_phase1.py 2026-05-04
+uv run python run_phase1.py 2026-05-04 --force-refresh  # 再取得
+```
 
-# キャッシュを無視して再取得
-uv run python run_phase1.py 2026-05-04 --force-refresh
+### 期間バックフィル (Phase 2)
+```bash
+# ローカルで2週間分
+uv run python backfill.py --start 2026-05-01 --end 2026-05-14
+
+# Colab用 (HTMLを使い捨て・ディスク節約)
+uv run python backfill.py --start 2024-04-01 --end 2024-09-30 --no-html-cache
+
+# チェックポイント無視してやり直し
+uv run python backfill.py --start 2026-05-01 --end 2026-05-07 --no-resume
 ```
 
 レート制限: デフォルト 2.5秒/リクエスト。HTMLキャッシュヒット時はスリープ省略。
+チェックポイント: `data/checkpoints/backfill_progress.json` に進捗を記録し、中断後の再開を可能にする。
+
+## Colab で 10年バックフィルを実行する手順
+
+1. **GitHub PAT 発行**
+   - [github.com/settings/personal-access-tokens/new](https://github.com/settings/personal-access-tokens/new) でfine-grained PATを作成
+   - Repository access: `keibakaiseki-svg/banei-analytics` のみ
+   - Permissions: `Contents` = **Read and write**
+2. **Colab を開く**: `notebooks/02_backfill_colab.ipynb` を Google Colab で開く
+3. **Secrets 登録**: Colab左サイドバーの🔑から `GITHUB_PAT` 名で発行したPATを登録、Notebook accessをオン
+4. **セルを順に実行**: クローン → 依存導入 → バックフィル → 進捗確認 → push
+5. **チャンク推奨**: 1セッションあたり半年〜1年分。各セッション後に必ず push してチェックポイントを保存
+
+データ取得可能範囲: **2014年〜現在** （2014-05-04・2018-05-05・2020-05-04・2024-05-04で取得成功確認済）。
+1日のキャッシュなし取得: 12レース × 2.5秒 ≈ 30秒/日。
+1年(約160開催日) ≈ 80分のネット時間。10年で約13時間。
 
 ## ロードマップ
 
@@ -187,7 +213,7 @@ uv run python run_phase1.py 2026-05-04 --force-refresh
 |---|---|---|
 | 0 | HTML構造調査・最小スクレイパ | 完了 |
 | 1 | 全項目スクレイパ・DuckDB保存 | 完了 |
-| 2 | Colabで過去10年バックフィル | |
+| 2 | Colabで過去10年バックフィル | 基盤完了 (実行待ち) |
 | 3 | 探索分析（馬番効果・水分量効果検証） | |
 | 3.5 | 派生特徴量生成（脚質代替指標） | |
 | 4 | 馬場パターンクラスタリング | |
@@ -207,14 +233,22 @@ uv run python run_phase1.py 2026-05-04 --force-refresh
 - 減量マーカー(☆)を全12Rで合計25騎手から検出
 - PK重複ゼロ・冪等性検証済（再実行で全行 `replaced` 扱い）
 
-## Phase 2 への引き継ぎ事項
+## Phase 2 完了サマリ
 
-1. 過去10年バックフィルを Colab で実行（チェックポイント・スキップ機構必須）
-2. 開催日カレンダーの取得方法を確立（開催日のみ巡回するため）
-3. 馬・騎手マスタテーブル化（entries から派生して長期成績集計可能に）
-4. 減量マーカーのバリアント収集（女性騎手騎乗レースを別日から取得・☆以外の例）
-5. マーカー → kg のマッピングルール整理
-6. 失格・中止等イレギュラーレースの実例収集
+- [backfill.py](backfill.py): 日付範囲指定・チェックポイント保存・再開可能なバックフィルスクリプト
+- [notebooks/02_backfill_colab.ipynb](notebooks/02_backfill_colab.ipynb): Colab実行用ノートブック
+- ローカル7日間テスト: 3開催日・36レース・322エントリを44KBのParquetに永続化
+- 過去10年遡及可能性検証: 2014-05-04・2018-05-05・2020-05-04・2024-05-04で取得成功
+- 開催なし日は `no_race_dates` に記録され再実行時にスキップ
+
+## Phase 3 への引き継ぎ事項
+
+1. 馬・騎手マスタテーブル化（entries から派生して長期成績集計可能に）
+2. 減量マーカーのバリアント収集（女性騎手騎乗レースを別日から取得・☆以外の例）
+3. マーカー → kg のマッピングルール整理
+4. 失格・中止等イレギュラーレースの実例収集
+5. 馬番別勝率の探索分析
+6. 水分量帯別の単勝回収率分析
 
 ## やらないこと
 
