@@ -1,0 +1,34 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
+
+# Future: large data caches (Phase 1+ will store raw HTML at scale)
+# Phase 0 sample HTML in data/raw_html/2026-05-04/ is intentionally committed
+data/processed/
+data/parquet/
+data/raw_html/2025-*/
+data/raw_html/2024-*/
+data/raw_html/2023-*/
+data/raw_html/2022-*/
+data/raw_html/2021-*/
+data/raw_html/2020-*/
+data/raw_html/2019-*/
+data/raw_html/2018-*/
+data/raw_html/2017-*/
+data/raw_html/2016-*/
+
+# Models (future)
+models/*.pkl
+models/*.joblib
