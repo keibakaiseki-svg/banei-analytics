@@ -125,11 +125,17 @@ def run(
     started = time.time()
     buffer: list[dict] = []
     new_no_data: set[str] = set()
+    processed_since_save = 0
 
     with httpx.Client(headers={"User-Agent": USER_AGENT}, timeout=30.0) as client:
         for i, race_id_local in enumerate(pending, 1):
             netkeiba_id = local_race_id_to_netkeiba(race_id_local)
-            html = fetch_odds_html(netkeiba_id, cache_root=cache_root, client=client)
+            try:
+                html = fetch_odds_html(netkeiba_id, cache_root=cache_root, client=client)
+            except Exception as e:
+                print(f"  ERROR on {race_id_local}: {type(e).__name__}: {e}")
+                # 失敗時もそれ以降の処理を継続。no_data には入れず後でリトライ可能に
+                continue
             cache_hit = (cache_root / f"{netkeiba_id}.html").exists()
 
             if html is None:
@@ -147,21 +153,26 @@ def run(
                 p = cache_root / f"{netkeiba_id}.html"
                 if p.exists():
                     p.unlink()
+            processed_since_save += 1
 
-            if len(buffer) >= batch_size * 9:  # 50レース × 平均9頭 ≈ 450行で書き出し
+            # buffer に行があれば 450行で flush
+            if len(buffer) >= batch_size * 9:
                 append_batch(buffer)
                 buffer = []
-                # checkpoint
-                no_data.update(new_no_data)
-                new_no_data.clear()
+
+            # **no_data は処理レース数連動で保存** (バッファ連動だと中断時に消失)
+            if processed_since_save >= batch_size:
+                if new_no_data:
+                    no_data.update(new_no_data)
+                    new_no_data.clear()
                 save_checkpoint(no_data)
-                # ETA
+                processed_since_save = 0
                 elapsed = time.time() - started
                 rate = i / elapsed
                 eta = (len(pending) - i) / rate if rate > 0 else float("inf")
                 print(
                     f"  [{i}/{len(pending)}] elapsed={elapsed:.0f}s  rate={rate:.2f}/s  "
-                    f"ETA={eta/60:.1f}min  no_data累計={len(no_data) + len(new_no_data)}"
+                    f"ETA={eta/60:.1f}min  no_data累計={len(no_data)}"
                 )
 
     # 最終バッチ
