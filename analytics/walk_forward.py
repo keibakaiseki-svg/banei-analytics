@@ -73,6 +73,42 @@ def get_payouts(parquet_root: Path = DEFAULT_PARQUET_ROOT) -> pd.DataFrame:
     return df
 
 
+def build_popularity_odds_lookup(
+    parquet_root: Path = DEFAULT_PARQUET_ROOT,
+    cutoff_date: Optional[str] = None,
+) -> pd.DataFrame:
+    """人気順別の単勝平均オッズ(=平均払戻/100円)。
+    バックテスト用に時点指定可能。EV計算で想定オッズとして使う。"""
+    con = duckdb.connect()
+    glob_p = str(parquet_root / "payouts/**/*.parquet")
+    glob_e = str(parquet_root / "entries/**/*.parquet")
+    glob_r = str(parquet_root / "races/**/*.parquet")
+    where = f"AND r.race_date < '{cutoff_date}'" if cutoff_date else ""
+    df = con.execute(
+        f"""
+        WITH win_pay AS (
+            SELECT race_id, CAST(combination AS INTEGER) AS horse_no, payout_yen
+            FROM read_parquet('{glob_p}', hive_partitioning=true)
+            WHERE bet_type = '単勝' AND combination NOT LIKE '%-%'
+        ),
+        winners AS (
+            SELECT e.race_id, e.horse_no, e.popularity
+            FROM read_parquet('{glob_e}', hive_partitioning=true) e
+            JOIN read_parquet('{glob_r}', hive_partitioning=true) r USING (race_id)
+            WHERE e.finish_pos = 1 AND e.popularity IS NOT NULL
+              {where}
+        )
+        SELECT w.popularity,
+               COUNT(*) AS wins,
+               ROUND(AVG(p.payout_yen) / 100.0, 2) AS avg_odds
+        FROM winners w
+        JOIN win_pay p USING (race_id, horse_no)
+        GROUP BY w.popularity ORDER BY w.popularity
+        """
+    ).fetchdf()
+    return df
+
+
 @dataclass
 class BacktestResult:
     monthly: pd.DataFrame
@@ -153,6 +189,47 @@ def run_backtest(
         bets_model = test.loc[idx_model, ["race_id", "horse_no", "finish_pos"]].copy()
         bets_model["strategy"] = "model"
 
+        # EV-based 選択的戦略: その時点までのデータから人気別平均オッズを学習
+        # EV = pred_p_win * assumed_odds で計算
+        pop_odds = build_popularity_odds_lookup(cutoff_date=m)
+        if not pop_odds.empty:
+            pop_odds_dict = dict(zip(pop_odds["popularity"], pop_odds["avg_odds"]))
+            test["assumed_odds"] = test["popularity"].map(pop_odds_dict)
+            test["ev"] = test["pred_p_win"] * test["assumed_odds"]
+
+            # 戦略1: 任意のEV>1.05馬全てベット (穴馬も含む)
+            ev_bets = test[test["ev"] > 1.05][
+                ["race_id", "horse_no", "finish_pos", "ev"]
+            ].copy()
+            ev_bets["strategy"] = "ev_gt_1.05"
+
+            # 戦略2: 厳格EV>1.15
+            ev_bets_strict = test[test["ev"] > 1.15][
+                ["race_id", "horse_no", "finish_pos", "ev"]
+            ].copy()
+            ev_bets_strict["strategy"] = "ev_gt_1.15"
+
+            # 戦略3: モデルTop1 + EV ゲート (Top1のEVが1.0超えるレースだけベット)
+            ev_top1 = test.loc[idx_model].copy()
+            ev_top1 = ev_top1[ev_top1["ev"] > 1.00][
+                ["race_id", "horse_no", "finish_pos", "ev"]
+            ].copy()
+            ev_top1["strategy"] = "model_top1_ev_gate"
+
+            # 戦略4: 1〜3番人気限定でモデルTop (穴を切ったモデル戦略)
+            fav_test = test[test["popularity"] <= 3]
+            if not fav_test.empty:
+                idx_fav = fav_test.groupby("race_id")["pred_p_win"].idxmax()
+                ev_fav = fav_test.loc[idx_fav, ["race_id", "horse_no", "finish_pos"]].copy()
+                ev_fav["strategy"] = "model_fav_only"
+            else:
+                ev_fav = pd.DataFrame(columns=["race_id", "horse_no", "finish_pos", "strategy"])
+        else:
+            ev_bets = pd.DataFrame(columns=["race_id", "horse_no", "finish_pos", "strategy"])
+            ev_bets_strict = ev_bets.copy()
+            ev_top1 = ev_bets.copy()
+            ev_fav = ev_bets.copy()
+
         # 1番人気
         pop_test = test[test["popularity"] == 1]
         bets_pop = pop_test.groupby("race_id").first().reset_index()[
@@ -175,14 +252,18 @@ def run_backtest(
         bets_rand = test.loc[rand_indices, ["race_id", "horse_no", "finish_pos"]].copy()
         bets_rand["strategy"] = "random"
 
-        bets = pd.concat([bets_model, bets_pop, bets_min, bets_rand], ignore_index=True)
+        bets = pd.concat(
+            [bets_model, bets_pop, bets_min, bets_rand, ev_bets, ev_bets_strict, ev_top1, ev_fav],
+            ignore_index=True,
+        )
         bets = bets.merge(win_pay, on=["race_id", "horse_no"], how="left")
         bets["won"] = (bets["finish_pos"] == 1).astype(int)
         bets["payout"] = np.where(bets["won"] == 1, bets["win_payout_if_won"].fillna(0), 0)
         bets["month"] = m
         bet_log.append(bets)
 
-        for strat in ["model", "popularity", "lowest_no", "random"]:
+        for strat in ["model", "popularity", "lowest_no", "random",
+                       "ev_gt_1.05", "ev_gt_1.15", "model_top1_ev_gate", "model_fav_only"]:
             s = bets[bets["strategy"] == strat]
             if s.empty:
                 continue
