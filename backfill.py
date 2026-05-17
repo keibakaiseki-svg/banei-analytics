@@ -27,7 +27,7 @@ import sys
 import time
 from dataclasses import dataclass, field
 from datetime import date as Date
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Optional
 
@@ -70,7 +70,7 @@ class Checkpoint:
 
     def save(self) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        self.last_updated = datetime.utcnow().isoformat() + "Z"
+        self.last_updated = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
         data = {
             "completed_dates": sorted(self.completed_dates),
             "no_race_dates": sorted(self.no_race_dates),
