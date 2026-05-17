@@ -1,0 +1,2932 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <META http-equiv=content-type content="text/html; charset=UTF-8" />
+  <META http-equiv="content-script-type" content="text/javascript" />
+  <META http-equiv="content-style-type" content="text/css" />
+  <link rel="stylesheet" href="../resources/css/reset.css?bld=20251121111641" type="text/css" media="all" />
+  <link rel="stylesheet" href="../resources/css/common2.css?bld=20251121111641" type="text/css" media="all" />
+  <link rel="stylesheet" href="../resources/css/raceinfo2.css?bld=20251121111641" type="text/css" media="all" />
+  <link rel="stylesheet" href="../resources/css/odd.css?bld=20251121111641"/>
+  <script type="text/javascript" src="/KeibaWeb/resources/js/jquery-1.9.1.min.js?bld=20251121111641"></script>
+  <SCRIPT language=JavaScript src="/KeibaWeb/resources/js/common.js?bld=20251121111641"></SCRIPT>
+  <meta name="description" content="" />
+  <meta name="keywords" content="" />
+  <title>オッズ｜地方競馬情報サイト</title>
+  <link rel="shortcut icon" href="/images/nar.ico">
+<script>
+$(function () {
+  $('select#selectRaceNo').on('change', function(e) {
+    window.location.href = '../TodayRaceInfo/OddsTanFuku?k_raceDate=2026%2f05%2f17&k_raceNo=' + e.target.value + '&k_babaCode=3';
+  });
+});
+</script>
+</head>
+
+<body>
+
+
+<header>
+    <div class="headerInner">
+        <div class="titleArea">
+            <h1>
+                <span>地方競馬情報サイト</span>
+                <a href="/index.html">
+                    <img src="/KeibaWeb/resources/img/mainlogo.png?bld=20251121111641" alt="">
+                </a>
+            </h1>
+            <div class="vote">
+                <img id="headerbanner00" src="/KeibaWeb/resources/img/header_banner_00.png?bld=20251121111641" alt="">
+            </div>
+            <ul class="bannerArea clearfix">
+                <li>
+                    <a href="https://www.keiba.go.jp/jranet/" target="_blank">
+                        <img class="normal" src="/KeibaWeb/resources/img/header_banner_01.png?bld=20251121111641">
+                        <img class="min" src="/KeibaWeb/resources/img/header_banner_01_min.png?bld=20251121111641">
+                    </a>
+                </li>
+                <li>
+                    <a href="https://www.spat4.jp/keiba/pc" target="_blank">
+                        <img class="normal" src="/KeibaWeb/resources/img/header_banner_02.png?bld=20251121111641">
+                        <img class="min" src="/KeibaWeb/resources/img/header_banner_02_min.png?bld=20251121111641">
+                    </a>
+                </li>
+
+                <li>
+                    <a href="https://my.keiba.rakuten.co.jp/?scid=keiba_NAR_bet" target="_blank">
+                        <img class="normal" src="/KeibaWeb/resources/img/header_banner_03.png?bld=20251121111641">
+                        <img class="min" src="/KeibaWeb/resources/img/header_banner_03_min.png?bld=20251121111641">
+                    </a>
+                </li>
+
+                <li>
+                    <a href="https://www.oddspark.com/keiba/auth/VoteKeibaTop.do" target="_blank">
+                        <img class="normal" src="/KeibaWeb/resources/img/header_banner_04.png?bld=20251121111641">
+                        <img class="min" src="/KeibaWeb/resources/img/header_banner_04_min.png?bld=20251121111641">
+                    </a>
+                </li>
+            </ul>
+
+
+
+            <div class="topSearch clearfix">
+                <form id="cse-search-box" action="https://google.com/cse">
+                    <input type="hidden" name="cx" value="000374752549361390111:sr3uzpcoe-q" />
+                    <input type="hidden" name="ie" value="UTF-8" />
+                    <input type="text" name="q" size="31" class="searchBox"/ placeholder="サイト内検索">
+                    <input type="submit" name="sa" value="" class="searchBtn"/>
+                </form>
+                <script type="text/javascript"
+                                src="https://www.google.com/coop/cse/brand?form=cse-search-boxamp;lang=ja"></script>
+            </div>
+        </div>
+    </div>
+
+    <div class="globalNavi">
+        <ul class="gNavi clearfix">
+            <li class="gNaviitem1">
+                <a href="/KeibaWeb/TodayRaceInfo/TodayRaceInfoTop">
+                    <img src="/KeibaWeb/resources/img/icon_gnavi_08.png?bld=20251121111641" alt="">
+                    <p>レース情報</p>
+                </a>
+            </li>
+            <li class="gNaviitem2">
+                <a href="/KeibaWeb/MonthlyConveneInfo/MonthlyConveneInfoTop">
+                    <img src="/KeibaWeb/resources/img/icon_gnavi_01.png?bld=20251121111641" alt="">
+                    <p>開催日程</p>
+                </a>
+            </li>
+            <li class="gNaviitem3">
+                <a href="/live/" target="_blank">
+                    <img src="/KeibaWeb/resources/img/icon_gnavi_02.png?bld=20251121111641" alt="">
+                    <p>ライブ中継</p>
+                </a>
+            </li>
+            <li class="gNaviitem4">
+                <a href="/dirtgraderace/">
+                    <img class="dart" src="/KeibaWeb/resources/img/icon_gnavi_12.png?bld=20251121111641" alt="">
+                    <p>ダートグレード競走</p>
+                </a>
+            </li>
+            <li class="gNaviitem5">
+                <a href="/gradedrace/">
+                    <img src="/KeibaWeb/resources/img/icon_gnavi_04.png?bld=20251121111641" alt="">
+                    <p>シリーズ･重賞競走</p>
+                </a>
+            </li>
+            <li class="gNaviitem6">
+                <a href="/KeibaWeb/DataRoom/DataRoomTop">
+                    <img src="/KeibaWeb/resources/img/icon_gnavi_05.png?bld=20251121111641" alt="">
+                    <p>データ検索</p>
+                </a>
+            </li>
+            <li class="gNaviitem7">
+                <a href="/guide/index.html">
+                    <img src="/KeibaWeb/resources/img/icon_gnavi_06.png?bld=20251121111641" alt="">
+                    <p>競馬場ガイド</p>
+                </a>
+            </li>
+            <!--<li>
+                <a href="about/">
+                    <img src="/KeibaWeb/resources/img/icon_gnavi_07.png?bld=20251121111641" alt="">
+                    <p>もっと！地方競馬</p>
+                </a>
+            </li>-->
+        </ul>
+    </div>
+</header>
+
+
+<div class="breadCrumb"></div>
+
+<div class="subMenu">
+<ul class="clearfix">
+<li><a href="../TodayRaceInfo/TodayRaceInfoTop" id="TodayRaceInfoTop">本日のレース情報</a></li>
+<li><a href="../MonthlyConveneInfo/MonthlyConveneInfoTop" id="MonthlyConveneInfoTop">月別開催日程</a></li>
+<li><a href="../TodayRaceInfo/RaceList?k_raceDate=2026%2f05%2f17&k_babaCode=3" id="RaceList">当日メニュー</a></li>
+<li><a href="../TodayRaceInfo/RefundMoneyList?k_raceDate=2026%2f05%2f17&k_babaCode=3" id="RefundList">当日払戻金</a></li>
+</ul>
+</div>
+
+
+<div id="mainContainer">
+<article class="raceCard">
+<div class="innerWrapper">
+
+
+
+
+
+
+
+<h4>2026年5月17日（日）　帯　広　第4競走　16:15発走</h4>
+<p class="racetime"><br/><br/></p>
+<section class="raceTitle">
+<p class="roundInfo"></p>
+<p class="date"></p>
+<p class="subTitle"></p>
+<h3>えのき家今年も来場記念２６Ｃ２－９</h3>
+<ul class="dataArea">
+<li>ダート　200ｍ（直）　　天候：曇　　馬場：0.7　　混合　3歳以上 規定　　＊電話投票コード：03#</li>
+<li>賞金　1着300,000円　2着111,000円　3着63,000円　4着33,000円　5着18,000円　</li>
+</ul>
+</section>
+<nav class="clearfix noWrapNav">
+<div class="chartNavi clearfix">
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<a class="cNaviBtn prev" href= "?k_raceDate=2026%2f05%2f17&k_raceNo=3&k_babaCode=3">前レース</a>
+
+
+<p class="cNaviBtnselect">
+<select class="short" id="selectRaceNo">
+<option value="1" >1R</option><option value="2" >2R</option><option value="3" >3R</option><option value="4" selected>4R</option><option value="5" >5R</option><option value="6" >6R</option><option value="7" >7R</option><option value="8" >8R</option><option value="9" >9R</option><option value="10" >10R</option><option value="11" >11R</option><option value="12" >12R</option>
+</select>
+</p>
+
+
+<a class="cNaviBtn next" href= "?k_raceDate=2026%2f05%2f17&k_raceNo=5&k_babaCode=3">次レース</a>
+
+</div>
+
+<div class="chartNavi clearfix">
+<a class="cNaviBtn" href="../TodayRaceInfo/DebaTable?k_raceDate=2026%2f05%2f17&k_raceNo=4&k_babaCode=3">出馬表</a>
+<a class="cNaviBtn" href="../TodayRaceInfo/CompeteTable?k_raceDate=2026%2f05%2f17&k_raceNo=4&k_babaCode=3">対戦表</a>
+<a class="cNaviBtn" target="_blank" href="../TodayRaceInfo/DebaTableSmall?k_raceDate=2026%2f05%2f17&k_raceNo=4&k_babaCode=3">印刷用出馬表</a>
+
+
+<a class="cNaviBtn" target="_blank" href="http://keiba-lv-st.jp/movie/player?date=20260517&race=4&track=obihiro">レース映像</a>
+
+
+
+
+
+<a class="cNaviBtn" href="../TodayRaceInfo/RaceMarkTable?k_raceDate=2026%2f05%2f17&k_raceNo=4&k_babaCode=3">競走成績</a>
+
+</div>
+
+<div class="chartNavi clearfix">
+<h3 class="naviTitle">オッズ</h3>
+
+
+<a class="cNaviBtn live" href="../TodayRaceInfo/OddsTanFuku?k_raceDate=2026%2f05%2f17&k_raceNo=4&k_babaCode=3">単・複</a>
+
+
+<a class="cNaviBtn " href="../TodayRaceInfo/OddsWakuLenFukuTan?k_raceDate=2026%2f05%2f17&k_raceNo=4&k_babaCode=3">枠連</a>
+
+
+<a class="cNaviBtn " href="../TodayRaceInfo/OddsUmLenFuku?k_raceDate=2026%2f05%2f17&k_raceNo=4&k_babaCode=3">馬連複</a>
+
+
+<a class="cNaviBtn " href="../TodayRaceInfo/OddsUmLenTan?k_raceDate=2026%2f05%2f17&k_raceNo=4&k_babaCode=3">馬連単</a>
+
+
+<a class="cNaviBtn " href="../TodayRaceInfo/OddsWide?k_raceDate=2026%2f05%2f17&k_raceNo=4&k_babaCode=3">ワイド</a>
+
+
+<a class="cNaviBtn " href="../TodayRaceInfo/Odds3LenFuku?k_raceDate=2026%2f05%2f17&k_raceNo=4&k_babaCode=3">三連複</a>
+
+
+<a class="cNaviBtn " href="../TodayRaceInfo/Odds3LenTan?k_raceDate=2026%2f05%2f17&k_raceNo=4&k_babaCode=3">三連単</a>
+
+</div>
+
+<br><br>
+</nav>
+
+
+<div id="odd_content">
+
+<div class="odd_header">	
+	<h4 class="odd_title">単勝・複勝　オッズ（最終）</h4>
+		
+	<ul class="odd_sort">
+		<a class="odd_sort_item active no_underline" href="/KeibaWeb/TodayRaceInfo/OddsTanFuku?k_raceDate=2026%2f05%2f17&k_raceNo=4&k_babaCode=3&odds_flg=4">馬番順</a>
+		<a class="odd_sort_item " href="/KeibaWeb/TodayRaceInfo/OddsTanFuku?k_raceDate=2026%2f05%2f17&k_raceNo=4&k_babaCode=3&odds_flg=5">人気順</a>
+	</ul>
+</div>
+
+
+<ul class="odd_list">
+<li class="odd_list_item active">
+<ul class="formList">
+<li class="formList--item active">
+<form name="formation_quinella" action="post">
+
+
+
+	
+	
+		<table class="odd_popular_table_02">
+	
+
+
+<thead><tr>
+
+	<th>枠</th>
+	<th>馬番</th>
+	<th>馬名</th>
+	<th>単勝<br>オッズ</th>
+	<th colspan="2">
+		
+			
+			
+			
+				複勝オッズ<br>(3着払い)
+			
+			
+		
+	</th>
+	<th>性齢</th>
+	<th>馬体重<br><span>(増減)</span></th>
+	
+		<th>積載<br>重量</th>
+	
+	<th>騎手<br><span>(所属)</span></th>
+	<th>所属</th>
+	<th>調教師</th>
+	<th>変更情報</th>
+</tr></thead>
+
+<tbody>
+
+
+
+
+	<tr>
+	
+	
+		
+			
+			<td 
+			
+				
+				
+					
+				
+				
+			
+			
+			
+			
+			>
+			1
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			<td
+				
+					
+				
+			
+			
+			
+			>
+			1
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			エンドワン
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			45.8
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			2.3-
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			4.5
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+					class='odd_red'
+				
+			
+			
+			>
+			牝3
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			959<span>（-15）</span>
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			   540
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			☆中原蓮<span>（ばんえい）</span>
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			ばんえい
+		</td>
+		
+			
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			金田勇
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			&nbsp;
+		</td>
+		
+	
+	
+	
+</tr>
+
+	<tr>
+	
+	
+		
+			
+			<td 
+			
+				
+					class='odd_post2'
+					
+				
+				
+					
+				
+				
+			
+			
+			
+			
+			>
+			2
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			<td
+				
+			
+			
+			
+			>
+			2
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			テツオ
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+					class='odd_red'
+				
+			
+			
+			>
+			6.9
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+					class='odd_red'
+				
+			
+			
+			>
+			1.4-
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+					class='odd_red'
+				
+			
+			
+			>
+			2.4
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			牡3
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			940<span>（-4）</span>
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			   570
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			 船山蔵<span>（ばんえい）</span>
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			ばんえい
+		</td>
+		
+			
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			藤野俊
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			&nbsp;
+		</td>
+		
+	
+	
+	
+</tr>
+
+	<tr>
+	
+	
+		
+			
+			<td 
+			
+				
+					class='odd_post3'
+					
+				
+				
+					
+				
+				
+			
+			
+			
+			
+			>
+			3
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			<td
+				
+			
+			
+			
+			>
+			3
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			キセキヲオコセ
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			48.9
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			9.2-
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			19.3
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			牡3
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			913<span>（+5）</span>
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			   560
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			☆臼杵龍<span>（ばんえい）</span>
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			ばんえい
+		</td>
+		
+			
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			大橋和
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			&nbsp;
+		</td>
+		
+	
+	
+	
+</tr>
+
+	<tr>
+	
+	
+		
+			
+			<td 
+			
+				
+					class='odd_post4'
+					
+				
+				
+					
+				
+				
+			
+			
+			
+			
+			>
+			4
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			<td
+				
+			
+			
+			
+			>
+			4
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			サカノシップー
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			107.1
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			19.0-
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			40.0
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			牡3
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			780<span>（+13）</span>
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			   570
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			 中山直<span>（ばんえい）</span>
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			ばんえい
+		</td>
+		
+			
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			小北栄
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			&nbsp;
+		</td>
+		
+	
+	
+	
+</tr>
+
+	<tr>
+	
+	
+		
+			
+			<td 
+			
+				
+					class='odd_post5'
+					
+				
+				
+					
+				
+				
+			
+			
+			
+			
+			>
+			5
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			<td
+				
+			
+			
+			
+			>
+			5
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			キタサカエヒメコ
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+					class='odd_red'
+				
+			
+			
+			>
+			2.1
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+					class='odd_red'
+				
+			
+			
+			>
+			1.0-
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+					class='odd_red'
+				
+			
+			
+			>
+			1.2
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+					class='odd_red'
+				
+			
+			
+			>
+			牝4
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			966<span>（-9）</span>
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			   540
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			☆今井千<span>（ばんえい）</span>
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			ばんえい
+		</td>
+		
+			
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			藤本匠
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			&nbsp;
+		</td>
+		
+	
+	
+	
+</tr>
+
+	<tr>
+	
+	
+		
+			
+			<td 
+			
+				
+					class='odd_post6'
+					
+				
+				
+					
+				
+				
+			
+			
+			
+			
+			>
+			6
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			<td
+				
+			
+			
+			
+			>
+			6
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			ミスキャップ
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+					class='odd_red'
+				
+			
+			
+			>
+			2.2
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+					class='odd_red'
+				
+			
+			
+			>
+			1.2-
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+					class='odd_red'
+				
+			
+			
+			>
+			1.9
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+					class='odd_red'
+				
+			
+			
+			>
+			牝3
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			964<span>（+4）</span>
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			   550
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			 赤塚健<span>（ばんえい）</span>
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			ばんえい
+		</td>
+		
+			
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			久田守
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			&nbsp;
+		</td>
+		
+	
+	
+	
+</tr>
+
+	<tr>
+	
+	
+		
+			
+			<td 
+			rowspan="2"
+				
+					class='odd_post7'
+					
+				
+				
+					
+				
+				
+			
+			
+			
+			
+			>
+			7
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			<td
+				
+			
+			
+			
+			>
+			7
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			タカノアイリス
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			23.6
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+					class='odd_red'
+				
+			
+			
+			>
+			1.9-
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+					class='odd_red'
+				
+			
+			
+			>
+			3.6
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+					class='odd_red'
+				
+			
+			
+			>
+			牝3
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			1006<span>（-2）</span>
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			   550
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			 西謙一<span>（ばんえい）</span>
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			ばんえい
+		</td>
+		
+			
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			平田義
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			&nbsp;
+		</td>
+		
+	
+	
+	
+</tr>
+
+	<tr>
+	
+	
+		
+			
+			<td 
+			
+				
+					class='odd_post7'
+					
+				
+				
+					style=display:none
+				
+				
+			
+			
+			
+			
+			>
+			7
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			<td
+				
+			
+			
+			
+			>
+			8
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			ヒロインカレン
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			33.3
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			2.7-
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			5.2
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+					class='odd_red'
+				
+			
+			
+			>
+			牝3
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			974<span>（-6）</span>
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			   540
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			☆大友一<span>（ばんえい）</span>
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			ばんえい
+		</td>
+		
+			
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			小林長
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			&nbsp;
+		</td>
+		
+	
+	
+	
+</tr>
+
+	<tr>
+	
+	
+		
+			
+			<td 
+			rowspan="2"
+				
+					class='odd_post8'
+					
+				
+				
+					
+				
+				
+			
+			
+			
+			
+			>
+			8
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			<td
+				
+			
+			
+			
+			>
+			9
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			ツカサキング
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			20.0
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			2.3-
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			4.5
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			牡3
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			914<span>&nbsp;</span>
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			   570
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			 島津新<span>（ばんえい）</span>
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			ばんえい
+		</td>
+		
+			
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			大河和
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			&nbsp;
+		</td>
+		
+	
+	
+	
+</tr>
+
+	<tr>
+	
+	
+		
+			
+			<td 
+			
+				
+					class='odd_post8'
+					
+				
+				
+					style=display:none
+				
+				
+			
+			
+			
+			
+			>
+			8
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			<td
+				
+			
+			
+			
+			>
+			10
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			ホリセンダイヤ
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			37.9
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			5.0-
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			10.3
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			牡3
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			977<span>（-3）</span>
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			   570
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			 金田利<span>（ばんえい）</span>
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			ばんえい
+		</td>
+		
+			
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			岩本利
+		</td>
+		
+	
+	
+	
+
+	
+	
+		
+			
+			
+			
+			<td
+				
+			
+			
+			>
+			&nbsp;
+		</td>
+		
+	
+	
+	
+</tr>
+
+
+
+</tbody></table>
+
+
+
+
+
+<br><br>
+</form></li></ul></li></ul>
+ 
+
+
+
+
+<article class="attention">
+  
+    <div class="innerWrapper">
+      
+        <p>※本日のレース情報画面において競馬場名が空欄の日は、 <br>　その日に開催がないことを意味しています。<br></p>
+      
+        <p>※減量騎手の負担重量は、★は４kg、▲は３kg、△及び◇は２kg、☆は１kg <br>　（ばんえいは、△は２０kg、☆は１０kg）を減じたものを表示しています。<br></p>
+      
+        <p>※競走種類は、特は特別、準は準重賞、重は重賞、表示なしは普通競走<br>　を表しています。<br><p>※単勝オッズでの順位です。<br></p>
+      
+        <p>※レース一覧画面においてレース名欄のＪ認はJRA認定競走、<br>　Ｊ交はJRA条件交流競走、Ｊ指はJRA指定競走を表しています。<br></p>
+      
+        <p>※2014年4月以降、「ナ」と表示されるのは、南関東のナイター開催日における<br>　照明点灯時のレースに限られます。<br>　馬場別成績においてナイターとして集計されるのも同様の扱いとなります。<br></p>
+      
+        <p>※勝馬投票に的中者がいない場合、その式別投票者全員に100円につき<br>　70円または80円の特払いがあります。表中の70円または80円は特払いを表示しています。<br></p>
+      
+        <p>「勝馬投票券は、必ず正規の窓口または電話投票で購入してください。</p>
+      
+        <p>　ノミ行為・代行業は、法律で禁止されています。</p>
+      
+        <p>　20歳未満の者は、勝馬投票券を購入することはできません。</p>
+      
+        <p>　出馬表・成績・オッズ等は、主催者発表のものと照合してください。」</p>
+      
+    </div>
+  
+</article>
+
+</div>
+</div>
+</article>
+</div>
+
+<div id="wrapper2">
+<footer class="footer">
+  <ul class="footerMenu">
+    <li>
+      <a href="/index.html">
+        HOME
+      </a>
+    </li>
+    <li>
+      <a href="/association/">
+        地方競馬全国協会（NAR）
+      </a>
+    </li>
+    <li>
+      <a href="/sitemap.html">
+        サイトマップ
+      </a>
+    </li>
+    <li>
+      <a href="/link.html">
+        関連リンク
+      </a>
+    </li>
+    <li>
+      <a href="/terms.html">
+        利用規約
+      </a>
+    </li>
+    <li>
+      <a href="/qa.html">
+				ご意見・ご要望／FAQ
+	</a>
+    </li>
+  </ul>
+
+  <div class="copyright">
+    copyright 1998-NAR (The National Association of Racing) All Rights Reserved
+  </div>
+				<!-- 言語選択 -->
+				<div class="language cp_sl01">
+					<select onChange="location.href=value;">
+						<option value="#">Language</option>
+						<option value="https://www.goracing.jp/english/">English</option>
+						<option value="https://www.goracing.jp/french/">Francais</option>
+						<option value="https://www.goracing.jp/chinese/">中文</option>
+						<option value="https://www.goracing.jp/korea/">한글</option>
+					</select>
+				</div>
+  
+</footer>
+</div>
+
+</body> </html>
