@@ -88,7 +88,8 @@ def fetch_odds_html(
         client = httpx.Client(headers={"User-Agent": USER_AGENT}, timeout=30.0)
     try:
         resp = client.get(_build_url(netkeiba_race_id))
-        if resp.status_code == 404:
+        # 400/404 は「該当レースなし」として扱う (netkeiba は古い無効レースを 400 で返す)
+        if resp.status_code in (400, 404):
             return None
         resp.raise_for_status()
         # netkeiba は EUC-JP
