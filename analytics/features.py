@@ -197,7 +197,38 @@ def build_feature_matrix(parquet_root: Path = DEFAULT_PARQUET_ROOT) -> pd.DataFr
                 SUM(CASE WHEN finish_pos <= 3 THEN 1 ELSE 0 END) OVER (
                     PARTITION BY horse_id ORDER BY run_no
                     ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING
-                ) AS lifetime_top3
+                ) AS lifetime_top3,
+                -- レース単位 expanding window で水分量適性を算出
+                -- (各レース時点までの過去データのみ・リーケージなし)
+                -- 水分量3帯: dry(<2.0), normal(2.0-3.0), wet(>=3.0)
+                AVG(CASE WHEN track_water_pct < 2.0 THEN speed_figure END) OVER (
+                    PARTITION BY horse_id ORDER BY run_no
+                    ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING
+                ) AS adapt_sf_dry,
+                COUNT(CASE WHEN track_water_pct < 2.0 THEN 1 END) OVER (
+                    PARTITION BY horse_id ORDER BY run_no
+                    ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING
+                ) AS adapt_n_dry,
+                AVG(CASE WHEN track_water_pct >= 2.0 AND track_water_pct < 3.0 THEN speed_figure END) OVER (
+                    PARTITION BY horse_id ORDER BY run_no
+                    ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING
+                ) AS adapt_sf_normal,
+                COUNT(CASE WHEN track_water_pct >= 2.0 AND track_water_pct < 3.0 THEN 1 END) OVER (
+                    PARTITION BY horse_id ORDER BY run_no
+                    ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING
+                ) AS adapt_n_normal,
+                AVG(CASE WHEN track_water_pct >= 3.0 THEN speed_figure END) OVER (
+                    PARTITION BY horse_id ORDER BY run_no
+                    ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING
+                ) AS adapt_sf_wet,
+                COUNT(CASE WHEN track_water_pct >= 3.0 THEN 1 END) OVER (
+                    PARTITION BY horse_id ORDER BY run_no
+                    ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING
+                ) AS adapt_n_wet,
+                AVG(speed_figure) OVER (
+                    PARTITION BY horse_id ORDER BY run_no
+                    ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING
+                ) AS adapt_overall_sf
         FROM ordered
         )
         SELECT *,
@@ -246,6 +277,14 @@ FEATURE_COLS_NUMERIC = [
     "lifetime_top3_rate",
     "days_since_last_run",
     "load_change_kg",
+    # レース単位 expanding 水分量適性 (リーケージなし)
+    "adapt_sf_dry",
+    "adapt_sf_normal",
+    "adapt_sf_wet",
+    "adapt_n_dry",
+    "adapt_n_normal",
+    "adapt_n_wet",
+    "adapt_overall_sf",
 ]
 FEATURE_COLS_BOOL = ["has_allowance", "jockey_changed"]
 FEATURE_COLS_CATEGORICAL = ["race_class", "water_band", "weather", "sex"]

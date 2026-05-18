@@ -107,15 +107,10 @@ def run_v2(
 ) -> dict:
     import lightgbm as lgb
 
-    print("=== 特徴量行列構築 ===")
+    print("=== 特徴量行列構築 (per-race expanding adaptability 込み) ===")
     df = build_feature_matrix(parquet_root)
     df["race_date"] = pd.to_datetime(df["race_date"])
     df = df[df["finish_pos"].notna()].copy()
-
-    print("=== 水分量適性特徴量 (cutoff=2024-01-01) ===")
-    adapt = build_water_adaptability_features(cutoff_date=test_start, parquet_root=parquet_root)
-    print(f"  adapt rows: {len(adapt)}")
-    df = df.merge(adapt, on="horse_id", how="left")
 
     print("=== 実 win_odds (netkeiba) ===")
     real_odds = get_real_odds(parquet_root)
@@ -127,11 +122,8 @@ def run_v2(
 
     df = prepare_features(df)
 
-    feature_cols = (
-        FEATURE_COLS_NUMERIC + FEATURE_COLS_BOOL + FEATURE_COLS_CATEGORICAL
-        + ["adapt_overall_sf", "adapt_sf_dry", "adapt_sf_normal", "adapt_sf_wet",
-           "adapt_n_dry", "adapt_n_normal", "adapt_n_wet", "adapt_total_runs"]
-    )
+    # features.py に既に adapt_* が含まれているので追加 cols 不要
+    feature_cols = FEATURE_COLS_NUMERIC + FEATURE_COLS_BOOL + FEATURE_COLS_CATEGORICAL
 
     months = month_range(test_start, test_end)
     monthly_records = []
