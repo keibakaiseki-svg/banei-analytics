@@ -141,7 +141,17 @@ def build_feature_matrix(parquet_root: Path = DEFAULT_PARQUET_ROOT) -> pd.DataFr
                 ELSE NULL
             END AS speed_figure,
             CASE WHEN e.finish_pos = 1 THEN 1 ELSE 0 END AS target_win,
-            CASE WHEN e.finish_pos <= 3 THEN 1 ELSE 0 END AS target_top3
+            CASE WHEN e.finish_pos <= 3 THEN 1 ELSE 0 END AS target_top3,
+            -- target_place: ばんえいの実複勝仕様に合わせる
+            --   8頭以上: 1-3着が払戻対象
+            --   5-7頭:  1-2着のみ払戻
+            --   4頭以下: 複勝なし → NULL (訓練・ベットから除外)
+            CASE
+                WHEN r.entry_count >= 8 AND e.finish_pos <= 3 THEN 1
+                WHEN r.entry_count BETWEEN 5 AND 7 AND e.finish_pos <= 2 THEN 1
+                WHEN r.entry_count < 5 THEN NULL
+                ELSE 0
+            END AS target_place
         FROM races_w r
         JOIN entries e USING (race_id)
         LEFT JOIN baselines b
