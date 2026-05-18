@@ -30,6 +30,10 @@ data/raw_html/2016-*/
 data/raw_html/2015-*/
 data/raw_html/2014-*/
 
+# Phase 5+/6 で取得する netkeiba HTML キャッシュ (Parquet が確定データ)
+data/raw_html/netkeiba_odds/
+data/raw_html/netkeiba_combo_odds/
+
 # 中間処理データ (Parquet は確定データなので commit する)
 data/processed/
 
