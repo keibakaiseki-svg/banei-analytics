@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 import time
 from dataclasses import asdict
 from pathlib import Path
@@ -129,6 +130,34 @@ def remove_html_cache_for_race(
         p.unlink()
 
 
+def git_auto_commit_push(message: str, repo_paths: Optional[list[str]] = None) -> None:
+    """データ更新を commit + push。失敗してもスクレイプ継続。
+    Colab 等で git 設定済の前提 (cell1 で user.name/email + PAT URL を設定)。"""
+    if repo_paths is None:
+        repo_paths = ["data/parquet/", "data/checkpoints/"]
+    try:
+        for p in repo_paths:
+            subprocess.run(["git", "add", p], check=False, capture_output=True)
+        r = subprocess.run(
+            ["git", "commit", "-m", message],
+            check=False, capture_output=True, text=True,
+        )
+        # "nothing to commit" は変更なし → push もスキップ
+        combined = (r.stdout or "") + (r.stderr or "")
+        if "nothing to commit" in combined or "nothing added to commit" in combined:
+            return
+        if r.returncode != 0:
+            print(f"  [auto-push] commit failed: {combined[:200].strip()}")
+            return
+        r = subprocess.run(["git", "push"], check=False, capture_output=True, text=True)
+        if r.returncode == 0:
+            print(f"  [auto-push] ✓ {message}")
+        else:
+            print(f"  [auto-push] push failed: {(r.stderr or r.stdout)[:200].strip()}")
+    except Exception as e:
+        print(f"  [auto-push] ERROR: {type(e).__name__}: {e}")
+
+
 def run(
     start: Optional[str] = None,
     end: Optional[str] = None,
@@ -138,6 +167,7 @@ def run(
     batch_size: int = 50,
     max_races: Optional[int] = None,
     no_html_cache: bool = False,
+    push_every_races: int = 0,
 ) -> None:
     bet_types = bet_types or list(BET_TYPES.keys())
     for bt in bet_types:
@@ -232,6 +262,12 @@ def run(
                     f"race_rate={race_rate:.2f}/s  req={total_req:,} ({req_rate:.1f}req/s)  ETA={eta/60:.1f}min"
                 )
 
+                # 指定間隔で自動 push (Colab セッション切断対策)
+                if push_every_races > 0 and processed % push_every_races == 0:
+                    git_auto_commit_push(
+                        f"Phase 6: combo odds auto-save @ {processed:,}/{len(pending_races):,} races"
+                    )
+
     # 最終バッチ
     for bt in bet_types:
         if buffers[bt]:
@@ -242,6 +278,9 @@ def run(
 
     elapsed = time.time() - started
     print(f"[combo odds] 完了: 経過={elapsed:.0f}s ({elapsed/60:.1f}分)  累計req={total_req:,}")
+    # 最終 push (--push-every-races 指定時)
+    if push_every_races > 0:
+        git_auto_commit_push("Phase 6: combo odds backfill final save")
     for bt in bet_types:
         out = output_path(bt)
         if out.exists():
@@ -262,6 +301,11 @@ def main() -> None:
     p.add_argument("--batch-size", type=int, default=50)
     p.add_argument("--max-races", type=int, default=None, help="動作確認用にレース数制限")
     p.add_argument("--no-html-cache", action="store_true", help="使用後 HTML を削除しディスク節約")
+    p.add_argument(
+        "--push-every-races",
+        type=int, default=0,
+        help="N>0 で N レース毎に git commit + push (Colab セッション切断対策)",
+    )
     args = p.parse_args()
     bet_types = [b.strip() for b in args.bet_types.split(",")] if args.bet_types else None
     run(
@@ -272,6 +316,7 @@ def main() -> None:
         batch_size=args.batch_size,
         max_races=args.max_races,
         no_html_cache=args.no_html_cache,
+        push_every_races=args.push_every_races,
     )
 
 
