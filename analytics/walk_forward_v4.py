@@ -196,10 +196,18 @@ def run_v4(
     train_start: str = "2014-04-01",
     parquet_root: Path = DEFAULT_PARQUET_ROOT,
     bet_types: list[str] | None = None,
+    bets_log_path: Path | None = None,
 ) -> dict:
+    """Walk-Forward v4 メイン。
+
+    bets_log_path が指定されると、各戦略のベット履歴を Parquet に保存。
+    後段の bankroll simulator (analytics/bankroll_sim.py) で資金管理シミュレーション
+    に使用できる。
+    """
     import lightgbm as lgb
 
     bet_types = bet_types or COMBO_BET_TYPES
+    all_bets_log: list[dict] = []
 
     print("=== 特徴量行列構築 ===")
     df = build_feature_matrix(parquet_root)
@@ -308,6 +316,19 @@ def run_v4(
                 "staked": staked, "paid": int(paid),
                 "roi": round(paid / staked, 3),
             })
+            if bets_log_path is not None:
+                for _, r in bets_win.iterrows():
+                    hit = bool(r["finish_pos"] == 1)
+                    all_bets_log.append({
+                        "strategy": "win_top1_ev>1.0", "month": str(m),
+                        "race_id": r["race_id"], "bet_type": "win",
+                        "combination": str(int(r["horse_no"])),
+                        "prob": float(r["pred_p_win"]),
+                        "ev": float(r["ev_win"]),
+                        "odds": float(r["real_win_odds"]),
+                        "hit": hit,
+                        "payout_per_100yen": float(r["real_win_odds"] * 100) if hit else 0.0,
+                    })
 
         # 2) 複勝 Top1 (v3 と同じ)
         test_place = test[test["place_eligible"]].copy()
@@ -326,69 +347,104 @@ def run_v4(
                     "staked": staked, "paid": int(paid),
                     "roi": round(paid / staked, 3),
                 })
+                if bets_log_path is not None:
+                    for _, r in bets_place.iterrows():
+                        hit = bool(pd.notna(r["place_payout"]))
+                        all_bets_log.append({
+                            "strategy": "place_top1_ev>1.0", "month": str(m),
+                            "race_id": r["race_id"], "bet_type": "place",
+                            "combination": str(int(r["horse_no"])),
+                            "prob": float(r["pred_p_place"]),
+                            "ev": float(r["ev_place"]),
+                            "odds": float(r["real_place_low"]),
+                            "hit": hit,
+                            "payout_per_100yen": float(r["place_payout"]) if hit else 0.0,
+                        })
 
-        # 3) 各 combo 券種で top1 EV>1.0
+        # 3) 各 combo 券種で top1 EV>1.0  (確率しきい値で longshot 排除)
         if not combo_ev.empty:
+            ec_lookup = test.groupby("race_id")["entry_count"].first().to_dict()
             for bt in bet_types:
                 sub = combo_ev[combo_ev["bet_type"] == bt]
                 if sub.empty:
                     continue
-                idx_top = sub.groupby("race_id")["ev"].idxmax()
-                bets = sub.loc[idx_top].copy()
-                bets = bets[bets["ev"] > 1.0]
-                if bets.empty:
-                    continue
-                staked = len(bets) * 100
-                paid = 0
-                hits = 0
-                for _, row in bets.iterrows():
-                    rid = row["race_id"]
-                    if rid not in top_by_race:
+                for prob_thr in [0.0, 0.05, 0.10, 0.20]:
+                    sub_f = sub[sub["prob"] >= prob_thr]
+                    if sub_f.empty:
                         continue
-                    finishers = top_by_race[rid]
-                    entry = int((test.loc[test["race_id"] == rid, "entry_count"]).iloc[0])
-                    wide_k = wide_top_k_from_entry(entry) if bt == "wide" else None
-                    if determine_combo_hit(row["combination"], finishers, bt, wide_top_k=wide_k):
-                        paid += row["odds_min"] * 100
-                        hits += 1
-                monthly_records.append({
-                    "month": m, "strategy": f"{bt}_top1_ev>1.0",
-                    "bets": len(bets), "wins": int(hits),
-                    "win_rate": hits / len(bets),
-                    "staked": staked, "paid": int(paid),
-                    "roi": round(paid / staked, 3),
-                })
+                    idx_top = sub_f.groupby("race_id")["ev"].idxmax()
+                    bets = sub_f.loc[idx_top].copy()
+                    bets = bets[bets["ev"] > 1.0]
+                    if bets.empty:
+                        continue
+                    staked = len(bets) * 100
+                    paid = 0
+                    hits = 0
+                    for _, row in bets.iterrows():
+                        rid = row["race_id"]
+                        if rid not in top_by_race:
+                            continue
+                        finishers = top_by_race[rid]
+                        entry = int(ec_lookup.get(rid, 10))
+                        wide_k = wide_top_k_from_entry(entry) if bt == "wide" else None
+                        if determine_combo_hit(row["combination"], finishers, bt, wide_top_k=wide_k):
+                            paid += row["odds_min"] * 100
+                            hits += 1
+                    strategy_label = f"{bt}_top1_ev>1.0_p>={prob_thr:.2f}"
+                    monthly_records.append({
+                        "month": m, "strategy": strategy_label,
+                        "bets": len(bets), "wins": int(hits),
+                        "win_rate": hits / len(bets),
+                        "staked": staked, "paid": int(paid),
+                        "roi": round(paid / staked, 3),
+                    })
+                    if bets_log_path is not None:
+                        for _, row in bets.iterrows():
+                            rid = row["race_id"]
+                            finishers = top_by_race.get(rid, [])
+                            entry = int(ec_lookup.get(rid, 10))
+                            wide_k = wide_top_k_from_entry(entry) if bt == "wide" else None
+                            hit = determine_combo_hit(row["combination"], finishers, bt, wide_top_k=wide_k)
+                            all_bets_log.append({
+                                "strategy": strategy_label, "month": str(m),
+                                "race_id": rid, "bet_type": bt,
+                                "combination": row["combination"],
+                                "prob": float(row["prob"]),
+                                "ev": float(row["ev"]),
+                                "odds": float(row["odds_min"]),
+                                "hit": bool(hit),
+                                "payout_per_100yen": float(row["odds_min"] * 100) if hit else 0.0,
+                            })
 
-        # 4) auto_max_ev: 全7券種からレースごと最良 EV を採用
-        #    単勝・複勝の馬単位 EV も candidates に含める
+        # 4) auto_max_ev: 全券種からレースごと最良 EV を採用 (prob しきい値付き)
         cand_rows: list[dict] = []
-        # 単勝
         for _, r in test.iterrows():
             if pd.notna(r["real_win_odds"]) and r["ev_win"] > 0:
                 cand_rows.append({
                     "race_id": r["race_id"], "bet_type": "win",
                     "combination": str(int(r["horse_no"])),
+                    "prob": float(r["pred_p_win"]),
                     "ev": r["ev_win"],
                     "odds_min": r["real_win_odds"], "odds_max": None,
                     "horse_no": int(r["horse_no"]), "entry_count": int(r["entry_count"]),
                 })
-        # 複勝
         for _, r in test_place.iterrows():
             if pd.notna(r["real_place_low"]) and r["ev_place"] > 0:
                 cand_rows.append({
                     "race_id": r["race_id"], "bet_type": "place",
                     "combination": str(int(r["horse_no"])),
+                    "prob": float(r["pred_p_place"]),
                     "ev": r["ev_place"],
                     "odds_min": r["real_place_low"], "odds_max": r["real_place_high"],
                     "horse_no": int(r["horse_no"]), "entry_count": int(r["entry_count"]),
                 })
-        # combo
         if not combo_ev.empty:
             ec_map = test.groupby("race_id")["entry_count"].first().to_dict()
             for _, r in combo_ev.iterrows():
                 cand_rows.append({
                     "race_id": r["race_id"], "bet_type": r["bet_type"],
                     "combination": r["combination"],
+                    "prob": float(r["prob"]),
                     "ev": r["ev"],
                     "odds_min": r["odds_min"], "odds_max": r["odds_max"],
                     "horse_no": None, "entry_count": ec_map.get(r["race_id"], 10),
@@ -396,48 +452,55 @@ def run_v4(
         candidates = pd.DataFrame(cand_rows) if cand_rows else pd.DataFrame()
 
         if not candidates.empty:
-            for thr in [1.0, 1.05, 1.10, 1.20]:
-                cand = candidates[candidates["ev"] > thr]
-                if cand.empty:
-                    continue
-                idx_max = cand.groupby("race_id")["ev"].idxmax()
-                bets = cand.loc[idx_max].copy()
-                staked = len(bets) * 100
-                paid = 0
-                hits = 0
-                for _, row in bets.iterrows():
-                    rid = row["race_id"]
-                    bt = row["bet_type"]
-                    if rid not in top_by_race:
+            for prob_thr in [0.0, 0.05, 0.10, 0.20]:
+                for ev_thr in [1.0, 1.10, 1.20]:
+                    cand = candidates[(candidates["ev"] > ev_thr) & (candidates["prob"] >= prob_thr)]
+                    if cand.empty:
                         continue
-                    finishers = top_by_race[rid]
-                    if bt == "win":
-                        if int(row["horse_no"]) == finishers[0]:
-                            paid += row["odds_min"] * 100
-                            hits += 1
-                    elif bt == "place":
-                        entry = int(row["entry_count"])
-                        place_k = 3 if entry >= 8 else 2
-                        # 複勝は payout が動的なので place_payout テーブル参照が望ましいが、
-                        # ここでは odds_min を保守的に使用 (実払戻の下限)
-                        if int(row["horse_no"]) in finishers[:place_k]:
-                            paid += row["odds_min"] * 100
-                            hits += 1
-                    else:
-                        wide_k = wide_top_k_from_entry(int(row["entry_count"])) if bt == "wide" else None
-                        if determine_combo_hit(row["combination"], finishers, bt, wide_top_k=wide_k):
-                            paid += row["odds_min"] * 100
-                            hits += 1
-                monthly_records.append({
-                    "month": m, "strategy": f"auto_max_ev>{thr:.2f}",
-                    "bets": len(bets), "wins": int(hits),
-                    "win_rate": hits / len(bets),
-                    "staked": staked, "paid": int(paid),
-                    "roi": round(paid / staked, 3),
-                })
+                    idx_max = cand.groupby("race_id")["ev"].idxmax()
+                    bets = cand.loc[idx_max].copy()
+                    staked = len(bets) * 100
+                    paid = 0
+                    hits = 0
+                    for _, row in bets.iterrows():
+                        rid = row["race_id"]
+                        bt = row["bet_type"]
+                        if rid not in top_by_race:
+                            continue
+                        finishers = top_by_race[rid]
+                        if bt == "win":
+                            if int(row["horse_no"]) == finishers[0]:
+                                paid += row["odds_min"] * 100
+                                hits += 1
+                        elif bt == "place":
+                            entry = int(row["entry_count"])
+                            place_k = 3 if entry >= 8 else 2
+                            # 複勝の払戻は odds_min を保守的に使用 (動的払戻の下限近似)
+                            if int(row["horse_no"]) in finishers[:place_k]:
+                                paid += row["odds_min"] * 100
+                                hits += 1
+                        else:
+                            wide_k = wide_top_k_from_entry(int(row["entry_count"])) if bt == "wide" else None
+                            if determine_combo_hit(row["combination"], finishers, bt, wide_top_k=wide_k):
+                                paid += row["odds_min"] * 100
+                                hits += 1
+                    monthly_records.append({
+                        "month": m, "strategy": f"auto_max_ev>{ev_thr:.2f}_p>={prob_thr:.2f}",
+                        "bets": len(bets), "wins": int(hits),
+                        "win_rate": hits / len(bets),
+                        "staked": staked, "paid": int(paid),
+                        "roi": round(paid / staked, 3),
+                    })
 
         if (m_idx + 1) % 6 == 0:
             print(f"  進捗: {m_idx+1}/{len(months)} ヶ月")
+
+    # ベットログ保存 (--bets-log-path 指定時)
+    if bets_log_path is not None and all_bets_log:
+        bets_log_path = Path(bets_log_path)
+        bets_log_path.parent.mkdir(parents=True, exist_ok=True)
+        pd.DataFrame(all_bets_log).to_parquet(bets_log_path, index=False, compression="zstd")
+        print(f"\nベットログ保存: {bets_log_path} ({len(all_bets_log):,} bets)")
 
     monthly = pd.DataFrame(monthly_records)
     overall = (
@@ -458,13 +521,18 @@ def main() -> None:
     p.add_argument("--test-end", default="2026-04-30")
     p.add_argument("--output", default="data/backtest/v4_all_bet_types.parquet")
     p.add_argument("--bet-types", default=None, help="カンマ区切り")
+    p.add_argument("--bets-log-path", default=None, help="戦略別ベット履歴の Parquet 保存先 (bankroll sim 用)")
     args = p.parse_args()
 
     pd.set_option("display.max_columns", None)
     pd.set_option("display.width", 200)
 
     bet_types = [b.strip() for b in args.bet_types.split(",")] if args.bet_types else None
-    res = run_v4(test_start=args.test_start, test_end=args.test_end, bet_types=bet_types)
+    res = run_v4(
+        test_start=args.test_start, test_end=args.test_end,
+        bet_types=bet_types,
+        bets_log_path=Path(args.bets_log_path) if args.bets_log_path else None,
+    )
 
     print()
     print("=== Walk-Forward v4 (全7券種 EV比較) 結果 ===")
