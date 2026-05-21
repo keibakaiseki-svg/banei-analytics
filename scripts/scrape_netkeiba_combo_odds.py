@@ -132,7 +132,11 @@ def remove_html_cache_for_race(
 
 def git_auto_commit_push(message: str, repo_paths: Optional[list[str]] = None) -> None:
     """データ更新を commit + push。失敗してもスクレイプ継続。
-    Colab 等で git 設定済の前提 (cell1 で user.name/email + PAT URL を設定)。"""
+    Colab 等で git 設定済の前提 (cell1 で user.name/email + PAT URL を設定)。
+
+    push が "fetch first" で reject された場合は git pull --rebase で再同期して
+    リトライする (リモートが先行している時のリカバリ)。
+    """
     if repo_paths is None:
         repo_paths = ["data/parquet/", "data/checkpoints/"]
     try:
@@ -142,18 +146,37 @@ def git_auto_commit_push(message: str, repo_paths: Optional[list[str]] = None) -
             ["git", "commit", "-m", message],
             check=False, capture_output=True, text=True,
         )
-        # "nothing to commit" は変更なし → push もスキップ
         combined = (r.stdout or "") + (r.stderr or "")
-        if "nothing to commit" in combined or "nothing added to commit" in combined:
-            return
-        if r.returncode != 0:
+        committed_now = (
+            r.returncode == 0
+            and "nothing to commit" not in combined
+            and "nothing added to commit" not in combined
+        )
+        if r.returncode != 0 and not (
+            "nothing to commit" in combined or "nothing added to commit" in combined
+        ):
             print(f"  [auto-push] commit failed: {combined[:200].strip()}")
             return
-        r = subprocess.run(["git", "push"], check=False, capture_output=True, text=True)
-        if r.returncode == 0:
-            print(f"  [auto-push] ✓ {message}")
-        else:
-            print(f"  [auto-push] push failed: {(r.stderr or r.stdout)[:200].strip()}")
+
+        # push (失敗時 pull --rebase でリトライ)
+        for attempt in (1, 2):
+            r = subprocess.run(["git", "push"], check=False, capture_output=True, text=True)
+            stderr = r.stderr or ""
+            if r.returncode == 0:
+                print(f"  [auto-push] ✓ {message}")
+                return
+            if attempt == 1 and ("fetch first" in stderr or "rejected" in stderr):
+                # リモートが先行 → pull --rebase してリトライ
+                pull = subprocess.run(
+                    ["git", "pull", "--rebase", "--autostash"],
+                    check=False, capture_output=True, text=True,
+                )
+                if pull.returncode != 0:
+                    print(f"  [auto-push] pull --rebase failed: {(pull.stderr or pull.stdout)[:200].strip()}")
+                    return
+                continue
+            print(f"  [auto-push] push failed: {stderr[:200].strip()}")
+            return
     except Exception as e:
         print(f"  [auto-push] ERROR: {type(e).__name__}: {e}")
 
